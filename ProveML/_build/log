@@ -1,0 +1,5 @@
+# dune init project ProveML
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root: /Users/owenzeller/Downloads/2041/ocaml-prover/ProveML
+# Auto-detected concurrency: 16
