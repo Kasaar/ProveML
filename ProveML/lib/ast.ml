@@ -1,3 +1,3 @@
 type expression =
-        | Indentifier of string
+        | Identifier of string
         | Application of expression * expression
