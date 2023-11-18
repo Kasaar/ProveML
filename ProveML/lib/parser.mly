@@ -2,6 +2,8 @@
 open Ast
 %}
 %token <string> IDENT
+%token PROVE
+%token LET
 %token LPAREN
 %token RPAREN
 %token EOF

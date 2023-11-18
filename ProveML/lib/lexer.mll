@@ -9,7 +9,11 @@ rule token = parse
 | newline { Lexing.new_line lexbuf; token lexbuf }
 | [' ' '\t'] { token lexbuf }
 | "//" [^ '\n' '\r']* { token lexbuf }
-| ['a'-'z' 'A'-'Z' '0'-'9' '_' '\'']+ as word { IDENT(word) }
+| ['a'-'z' 'A'-'Z' '0'-'9' '_' '\'']+ as word 
+        { match word with
+                | "(*prove*)" -> PROVE
+                | "let" -> LET
+                | _ -> IDENT(word) }
 | "(*" { comment 0 lexbuf }
 | '(' { LPAREN }
 | ')' { RPAREN }
