@@ -1,6 +1,7 @@
 type expression =
         | Identifier of string
         | Application of expression * expression
+        | Equals of expression * expression
 
 type equation =
         | Operator of string
