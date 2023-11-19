@@ -11,9 +11,9 @@ rule token = parse
 | "//" [^ '\n' '\r']* { token lexbuf }
 | ['a'-'z' 'A'-'Z' '0'-'9' '_' '\'']+ as word 
         { match word with
-                | "(*prove*)" -> PROVE
                 | "let" -> LET
                 | _ -> IDENT(word) }
+| "(*prove*)" { PROVE }
 | "(*" { comment 0 lexbuf }
 | '=' { EQUALS }
 | '(' { LPAREN }

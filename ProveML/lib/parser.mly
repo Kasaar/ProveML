@@ -17,8 +17,8 @@ open Ast
 main:
 | d = list(declaration) ; EOF { d }
 declaration:
-| LPAREN ; nm1 = IDENT ; COLON ; nm2 = IDENT ; RPAREN { Arg (Identifier nm1, Identifier nm2) }
-| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = expression { Let (Identifier nm, d, e) }
+| LPAREN ; nm1 = IDENT ; COLON ; nm2 = IDENT ; RPAREN { Arg (nm1, nm2) }
+| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = expression { Let (nm, d, e) }
 expression:
 | LPAREN ; e = expression ; RPAREN { e }
 | nm = IDENT { Identifier nm }

@@ -6,7 +6,7 @@ type equation =
         | Equality of expression * expression
 
 type declaration =
-        | Arg of expression * expression
-        | Let of expression * declaration * expression
+        | Arg of string * string
+        | Let of string * declaration * expression
         | Rec of expression * declaration
         | Type of expression
