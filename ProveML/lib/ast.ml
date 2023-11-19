@@ -3,9 +3,10 @@ type expression =
         | Application of expression * expression
 
 type equation =
-        | Operator of string
-        | Type of expression * expression
-        | Equation of expression * equation * expression
+        | Equality of expression * expression
 
 type declaration =
-        | Let of expression * equation
+        | Arg of expression * expression
+        | Let of expression * declaration * expression
+        | Rec of expression * declaration
+        | Type of expression

@@ -1,0 +1,1 @@
+let (*prove*) cf (h : int) = h

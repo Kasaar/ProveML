@@ -3,7 +3,7 @@
         Names may vary, but these are the things this executable needs.
         In any case, these four definitions should be the only things you need to
 change. *)
-let string_of_declaration = ProveML.string_of_expression
+let string_of_declaration = ProveML.string_of_declaration
 let mainParser = ProveML.Parser.main
 let mainLexer = ProveML.Lexer.token
 module Parser : (sig exception Error end) = ProveML.Parser

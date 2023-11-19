@@ -15,8 +15,10 @@ rule token = parse
                 | "let" -> LET
                 | _ -> IDENT(word) }
 | "(*" { comment 0 lexbuf }
+| '=' { EQUALS }
 | '(' { LPAREN }
 | ')' { RPAREN }
+| ':' { COLON }
 | _ { raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
 | eof { EOF }
 and comment level = parse
