@@ -17,6 +17,6 @@ let string_of_equation e =
 
 let rec string_of_declaration d =
         match d with
-        | Let (nm, args, e) -> "let (*prove*) " ^ nm ^ " " ^ (string_of_declaration args) ^ " = " ^ (string_of_equation e)
+        | Let (nm, args, e, hint) -> "let (*prove*) " ^ nm ^ " " ^ (string_of_declaration args) ^ " = " ^ (string_of_equation e) ^ "\n" ^ hint
         | Arg (nm1 , nm2) -> "(" ^ nm1 ^ " : " ^ nm2 ^ ")"
         | _ -> "Not implemented in ProveML"

@@ -4,6 +4,7 @@ open Ast
 %token <string> IDENT
 %token PROVE
 %token LET
+%token HINTAXIOM
 %token EQUALS
 %token LPAREN
 %token RPAREN
@@ -18,7 +19,8 @@ main:
 | d = list(declaration) ; EOF { d }
 declaration:
 | LPAREN ; nm1 = IDENT ; COLON ; nm2 = IDENT ; RPAREN { Arg (nm1, nm2) }
-| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = equation { Let (nm, d, e) }
+| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = equation ; HINTAXIOM{ Let (nm, d, e, "(*hint: axiom *)") }
+| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = equation { Let (nm, d, e, "") }
 equation:
 | e1 = expression ; EQUALS ; e2 = expression { Equality (e1, e2) }
 | LPAREN ; e1 = expression ; EQUALS ; e2 = expression ; RPAREN { Equality (e1, e2) }

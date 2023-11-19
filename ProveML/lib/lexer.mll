@@ -14,6 +14,7 @@ rule token = parse
                 | "let" -> LET
                 | _ -> IDENT(word) }
 | "(*prove*)" { PROVE }
+| "(*hint: axiom *)" { HINTAXIOM }
 | "(*" { comment 0 lexbuf }
 | '=' { EQUALS }
 | '(' { LPAREN }
