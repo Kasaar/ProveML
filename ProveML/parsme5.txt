@@ -1,1 +1,5 @@
-let (*prove*) cf_idempotent (h : int) = (cf (cf (h)))
+let (*prove*) cf_idempotent (h : int) = (cf (cf (h)) = cf (h))
+let (*prove*) inv_involution (h : int) = (inv (inv (h)) = h)
+let (*prove*) cf_inv_commute (h : int) = (cf (inv (h)) = inv (cf (h)))
+let (*prove*) cf_inv_property (h : int) = (cf (inv (cf (inv (h)))) = cf
+(h))

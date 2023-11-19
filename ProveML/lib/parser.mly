@@ -18,7 +18,10 @@ main:
 | d = list(declaration) ; EOF { d }
 declaration:
 | LPAREN ; nm1 = IDENT ; COLON ; nm2 = IDENT ; RPAREN { Arg (nm1, nm2) }
-| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = expression { Let (nm, d, e) }
+| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = equation { Let (nm, d, e) }
+equation:
+| e1 = expression ; EQUALS ; e2 = expression { Equality (e1, e2) }
+| LPAREN ; e1 = expression ; EQUALS ; e2 = expression ; RPAREN { Equality (e1, e2) }
 expression:
 | LPAREN ; e = expression ; RPAREN { e }
 | nm = IDENT { Identifier nm }

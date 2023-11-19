@@ -7,6 +7,6 @@ type equation =
 
 type declaration =
         | Arg of string * string
-        | Let of string * declaration * expression
+        | Let of string * declaration * equation
         | Rec of expression * declaration
         | Type of expression
