@@ -4,41 +4,35 @@ open Ast
 %token <string> IDENT
 %token PROVE
 %token LET
-%token HINTAXIOM
+%token AXIOM
+%token HINT
+%token ENDCOMMENT
 %token EQUALS
 %token LPAREN
 %token RPAREN
 %token COLON
+%token COMMA
 %token EOF
 %start main
-// %type <expression list> main
-// %type <equation> equation
 %type <declaration list> main
 %%
 main:
 | d = list(declaration) ; EOF { d }
 declaration:
-| LPAREN ; nm1 = IDENT ; COLON ; nm2 = IDENT ; RPAREN { Arg (nm1, nm2) }
-| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = equation ; HINTAXIOM{ Let (nm, d, e, "(*hint: axiom *)") }
-| LET ; PROVE ; nm = IDENT ; d = declaration ; EQUALS ; e = equation { Let (nm, d, e, "") }
+| LET ; PROVE ; nm = IDENT ; args = list(argument) ; EQUALS ; e = equation ; hint = option(hint) { Let (nm, args, e, hint) }
+argument:
+| nm = IDENT ; COLON ; t = IDENT { Arg (nm, t) }
+| LPAREN ; arg = argument ; RPAREN { arg }
 equation:
 | e1 = expression ; EQUALS ; e2 = expression { Equality (e1, e2) }
 | LPAREN ; e1 = expression ; EQUALS ; e2 = expression ; RPAREN { Equality (e1, e2) }
+hint:
+| HINT ; AXIOM ; ENDCOMMENT { Axiom }
 expression:
-| LPAREN ; e = expression ; RPAREN { e }
+| LPAREN ; e = expression_with_commas ; RPAREN { e }
+| lhs = expression ; arg = IDENT { Application (lhs, Identifier arg) }
+| lhs = expression ; LPAREN ; arg = expression_with_commas ; RPAREN { Application (lhs, arg) }
 | nm = IDENT { Identifier nm }
-| e1 = expression ; nm = IDENT { Application (e1,Identifier nm) }
-| e1 = expression ; LPAREN ; e2 = expression ; RPAREN ; { Application (e1, e2) }
-
-
-
-// main:
-// | e = expression ; EOF { [e] }
-// expression:
-// | LPAREN ; e = expression ; RPAREN { e }
-// | nm = IDENT { Identifier nm }
-// | e1 = expression ; nm = IDENT { Application (e1,Identifier nm) }
-// | e1 = expression ; LPAREN ; e2 = expression ; RPAREN ; { Application (e1, e2) }
-// equation:
-// | e1 = expression ; EQUALS ; e2 = expression { Equation (e1, e2) }
-// | nm = IDENT ; EQUALS ; e = expression { Equation (Identifier nm, e) }
+expression_with_commas:
+| e = expression { e }
+| e1 = expression_with_commas ; COMMA ; e2 = expression { Application (Application (e1, Identifier ","), e2) }
