@@ -164,7 +164,7 @@ match equations with
 | [] -> []
 | h :: t -> (match tryEqualities expr (h :: t) with
 | None -> []
-| Some (nm, e) -> [(nm, e)] @ (performSteps expr t))
+| Some (nm, e) -> (performSteps e t) @ [(nm, e)])
 
 
 let rec compute_lhs lhs_steps acc =

@@ -1,16 +1,20 @@
 let (*prove*) cf_idempotent (h : int)
 = (cf (cf h) = cf h)
 (*hint: axiom *)
+
 let (*prove*) inv_involution (h : int)
 = (inv (inv h) = h)
 (*hint: axiom *)
+
 let (*prove*) cf_inv_commute (h : int)
 = (cf (inv h) = inv (cf h))
 (*hint: axiom *)
+
 (* This should now be provable from the axioms: *)
 let (*prove*) cf_inv_property (h : int)
 = (cf (inv (cf (inv h))) = cf h)
 (* no hints! *)
+
 (* Output should read something like this:
 Proof of cf_inv_property:
 cf (inv (cf (inv h)))
