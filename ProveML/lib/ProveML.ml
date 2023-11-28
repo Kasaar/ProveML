@@ -130,17 +130,11 @@ because it's so symmetrical *)
 | _ -> None)
 | _ -> None
 
-let rec attemptRewrite (variables : string list) (equality : equality) (expr : expression) : expression option =
-let lhs = match equality with
-| Equality (lhs, _) -> lhs
-in
-let rhs = match equality with
-| Equality (_, rhs) -> rhs
-in
+let rec attemptRewrite (variables : string list) (lhs : expression) (rhs : expression) (expr : expression) : expression option =
 match match_expressions variables lhs expr with
 | Some map -> Some (rewrite variables map rhs)
 | None -> (match expr with 
-| Application(fn, arg) -> (match attemptRewrite variables equality arg with
+| Application(fn, arg) -> (match attemptRewrite variables lhs rhs arg with
 | Some v -> Some (Application (fn, v))
 | None -> None)
 | _ -> None
@@ -155,17 +149,23 @@ let rec tryEqualities (expr : expression) (equations : (string * string list * e
 match equations with
 | [] -> None
 | h :: t -> (match h with
-| nm, variables, equality -> (match attemptRewrite variables equality expr with
+| nm, variables, equality -> 
+        (let lhs = match equality with
+        | Equality (lhs, _) -> lhs
+        in
+        let rhs = match equality with
+        | Equality (_, rhs) -> rhs
+        in
+        (match attemptRewrite variables lhs rhs expr with
 | Some e -> Some (nm, e)
-| None -> tryEqualities expr t))
+| None -> tryEqualities expr t)))
 
 let rec performSteps (expr : expression) (equations : (string * string list * equality) list) : (string * expression) list =
 match equations with
-| [] -> []
 | h :: t -> (match tryEqualities expr (h :: t) with
 | None -> []
-| Some (nm, e) -> (performSteps e t) @ [(nm, e)])
-
+| Some (nm, e) -> (performSteps e (h :: t)) @ [(nm, e)])
+| _ -> []
 
 let rec compute_lhs lhs_steps acc =
 match lhs_steps with
@@ -228,7 +228,7 @@ let test_main decls =
         in
         match rest with
         | ProofDeclaration (_, vars, Equality (lhs,rhs), _) :: _ ->
-                (match (attemptRewrite (variables_to_string vars) (Equality (lhs,rhs)) expr) with
+                (match (attemptRewrite (variables_to_string vars) lhs rhs expr) with
                 | Some e -> string_of_expression e
                 | None -> "nothing") |> print_endline
         | _ -> ()

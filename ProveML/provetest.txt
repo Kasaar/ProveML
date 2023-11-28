@@ -1,7 +1,7 @@
 let (*prove*) cf_inv_property (h : int)
-= (inv (inv (cf h)) = cf h)
+= (inv (cf (inv h)) = cf h)
 (* no hints! *)
 
-let (*prove*) inv_involution (h : int)
-= (inv (inv h) = h)
+let (*prove*) cf_idempotent (h : int)
+= (cf (cf h) = cf h)
 (*hint: axiom *)
