@@ -136,7 +136,9 @@ match match_expressions variables lhs expr with
 | None -> (match expr with 
 | Application(fn, arg) -> (match attemptRewrite variables lhs rhs arg with
 | Some v -> Some (Application (fn, v))
-| None -> None)
+| None -> (match attemptRewrite variables lhs rhs fn with
+| Some v -> Some (Application (v, arg))
+| None -> None))
 | _ -> None
 )
 and rewrite variables map rhs =
@@ -160,12 +162,12 @@ match equations with
 | Some e -> Some (nm, e)
 | None -> tryEqualities expr t)))
 
-let rec performSteps (expr : expression) (equations : (string * string list * equality) list) : (string * expression) list =
+let rec performSteps (expr : expression) (equations : (string * string list * equality) list) side : (string * expression) list =
 match equations with
 | h :: t -> (match tryEqualities expr (h :: t) with
 | None -> []
-| Some (nm, e) -> (performSteps e (h :: t)) @ [(nm, e)])
-| _ -> []
+| Some (nm, e) -> (if side = "lhs" then (performSteps e (h :: t) side) @ [(nm, e)] else (performSteps e (h :: t) side) @ [(nm, expr)]))
+| _ -> ["??? Could not determine a next proof step ???", expr]
 
 let rec compute_lhs lhs_steps acc =
 match lhs_steps with
@@ -186,9 +188,9 @@ in
 let rhs = match equality with
 | Equality (_, rhs) -> rhs
 in
-let lhs_steps = performSteps lhs equations
+let lhs_steps = performSteps lhs equations "lhs"
 in
-let rhs_steps = performSteps rhs equations
+let rhs_steps = performSteps rhs equations "rhs"
 in
 let lhs_proof = compute_lhs lhs_steps []
 in
