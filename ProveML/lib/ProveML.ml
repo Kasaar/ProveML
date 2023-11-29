@@ -99,17 +99,6 @@ match x with
 | Some v -> f v
 | None -> None
 
-(* let rec match_expressions (variables : string list) (pattern : expression) (goal : expression) : expression Substitution.t option =
-match pattern, goal with
-| Identifier id1, Identifier id2 ->
-(* If the identifier is in the list of variables, create a substitution *)
-if List.mem id2 variables then Some (Substitution.singleton id1 (Identifier id2)) else None
-| Application (pat1, pat2), Application (expr1, expr2) ->
-match_expressions variables pat1 expr1 >>= fun result1 ->
-match_expressions variables pat2 expr2 >>= fun result2 ->
-(Substitution.merge result1 result2)
-| _ -> None *)
-
 let rec match_expressions variables pattern expression =
 match pattern with
 | Identifier x -> if List.mem x variables then (* Todo: fix test for variables: the string "x" is not necessarily the only variable and it might not always be a variable either *)
@@ -203,21 +192,22 @@ let rec variables_to_string vars =
         | h :: t -> (match h with
                 | TypedVariable (nm, _) -> ([nm] @ (variables_to_string t)))
 
-let rec prover rules declarations =
-match declarations with
-| ProofDeclaration (nm, vars, Equality (lhs,rhs), None) :: rest
--> (* no hint, so let's prove this *)
-produceProof (Equality (lhs,rhs)) rules :: prover ((nm,(variables_to_string vars),(Equality (lhs,rhs)))::rules) rest
-| ProofDeclaration (nm, vars, Equality (lhs,rhs), _) :: rest
--> (* we got a hint so we simply assume the statement *)
-prover ((nm,(variables_to_string vars),(Equality (lhs,rhs)))::rules) rest
-| _ :: rest -> prover rules rest
-| [] -> []
+let rec prover rules declarations : 'a list =
+        match declarations with
+        | ProofDeclaration (nm, vars, Equality (lhs,rhs), None) :: rest
+                -> (* no hint, so let's prove this *)
+                [("Proof of " ^ nm ^ ":")] :: produceProof (Equality (lhs,rhs)) rules :: prover ((nm,(variables_to_string vars),(Equality (lhs,rhs)))::rules) rest
+|        ProofDeclaration (nm, vars, Equality (lhs,rhs), _) :: rest
+                -> (* we got a hint so we simply assume the statement *)
+                prover ((nm,(variables_to_string vars),(Equality (lhs,rhs)))::rules) rest
+        | _ :: rest -> prover rules rest
+        | [] -> []
+
 let prover_main decls =
-prover [] decls |>
-List.map (String.concat "\n") |>
-String.concat "\n\n" |>
-print_endline
+        prover [] decls |>
+        List.map (String.concat "\n") |>
+        String.concat "\n\n" |>
+        print_endline
 
 let test_main decls =
         let expr = (match decls with
