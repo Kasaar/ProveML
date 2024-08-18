@@ -32,6 +32,7 @@ versions than specified below, you will need to edit the `dune-project` file acc
 ### Windows ###
 
 Using PowerShell:
+
     Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/ocaml/opam/master/shell/install.ps1) }"
     opam install dune.3.10.0
     opam install menhir.20230608
