@@ -19,22 +19,22 @@ versions than specified below, you will need to edit the `dune-project` file acc
 
 ### MacOS ###
 
-`brew install opam`
-`opam install dune.3.10.0`
-`opam install menhir.20230608`
+    brew install opam
+    opam install dune.3.10.0
+    opam install menhir.20230608
 
 ### Linux ###
 
-`bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)"`
-`opam install dune.3.10.0`
-`opam install menhir.20230608`
+    bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)"
+    opam install dune.3.10.0
+    opam install menhir.20230608
 
 ### Windows ###
 
 Using PowerShell:
-`Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/ocaml/opam/master/shell/install.ps1) }"`
-`opam install dune.3.10.0`
-`opam install menhir.20230608`
+    Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/ocaml/opam/master/shell/install.ps1) }"
+    opam install dune.3.10.0
+    opam install menhir.20230608
 
 ### Installation ###
 
@@ -60,4 +60,5 @@ After compiling, run the following command from the nested `ProveML` directory:
 text/markdown file that contains the theorem(s) to be proved.
 
 E.g. a working command with the example input:
+
     ./_build/default/bin/main.exe --simple proveme.txt
